@@ -26,9 +26,8 @@ Welcome to the alpha version of For You! This application enables seamless real-
 
 ## Usage
 
-1. Sign in or create an account to start a session.
-2. Enter the Peer ID of your friend to establish a connection.
-3. Enjoy real-time communication and synchronized YouTube video playback with your friends.
+1. Enter the Peer ID of your friend to establish a connection.
+2. Enjoy real-time communication and synchronized YouTube video playback with your friends.
 
 ## Contributing
 
