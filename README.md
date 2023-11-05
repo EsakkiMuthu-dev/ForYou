@@ -42,7 +42,7 @@ Welcome to the alpha version of For You! This application enables seamless real-
 - Synchronized YouTube video playback for shared viewing
 - Simple and intuitive user interface for a smooth user experience
 
-## Stacks Used
+## Technologies Used
 
 - WebRTC
 - PeerJS
