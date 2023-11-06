@@ -20,6 +20,7 @@ function App() {
   const [isAudioOn, setAudioOn] = useState(true);
   const[isOnCall,setIsOnCall] = useState(false);
   const[youtubeLink,setYoutubeLink]=useState('');
+  const [isPlaying, setIsPlaying] = useState(false);
   const[recievedMessages,setReceievedMessages]=useState(["hi","hello"]);
   const ourConnection = useRef(null);
   const ourVideoRef = useRef(null);
@@ -48,6 +49,13 @@ function App() {
     }
   };
 
+  //toggle video play
+  const togglePlay=()=>{
+    const playStatus = isPlaying ? "Pause" : "Play";  
+    ourConnection.current.send(`Play ${playStatus}`);
+    setIsPlaying(!isPlaying);
+  }
+
   // End Call
   const endCall = () => {
     ourConnection.current.send("End Call --> Call ended");
@@ -63,6 +71,10 @@ function App() {
       peerInstance.current.destroy();
     }
     setIsOnCall(false);
+
+    // Refresh the webpage
+  window.location.reload();
+
   };
 
   // Function to handle the YouTube video link
@@ -92,6 +104,11 @@ function App() {
           {
               setYoutubeLink(data.split(' ')[1]);
           }
+          if(data.startsWith('Play'))
+          {
+            const status = data.split(" ")[1];
+            setIsPlaying(status === "Play");
+          }
           if(data.startsWith("End"))
           {
             console.log("Comes inside End Call--->")
@@ -107,6 +124,9 @@ function App() {
               peerInstance.current.destroy();
             }
             setIsOnCall(false);
+
+            // Refresh the webpage
+            window.location.reload();
           }
           console.log(data.startsWith('End'))
           console.log('Received', data);
@@ -144,6 +164,8 @@ function App() {
             remoteVideoRef.current.play().catch((error) => console.log(error));
           };
         });
+
+        toggleVideo();
         
       });
     });
@@ -163,6 +185,29 @@ function App() {
           {
             setYoutubeLink(data.split(' ')[1]);
            
+          }
+          if(data.startsWith("Play"))
+          {
+            const status = data.split(" ")[1];
+            setIsPlaying(status === "Play");
+          }
+          if(data.startsWith("End"))
+          {
+            console.log("Comes inside End Call--->")
+            if (ourVideoRef.current && ourVideoRef.current.srcObject) {
+              const tracks = ourVideoRef.current.srcObject.getTracks();
+              tracks.forEach((track) => track.stop());
+            }
+            if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+              const tracks = remoteVideoRef.current.srcObject.getTracks();
+              tracks.forEach((track) => track.stop());
+            }
+            if (peerInstance.current) {
+              peerInstance.current.destroy();
+            }
+            setIsOnCall(false);
+            // Refresh the webpage
+            window.location.reload();
           }
     
         console.log('Received', data);
@@ -193,6 +238,7 @@ function App() {
           remoteVideoRef.current.play().catch((error) => console.log(error));
         };
       });
+      toggleVideo();
 
     });
   };
@@ -210,7 +256,7 @@ function App() {
     <>
     <Header />
     <main>
-
+    {!isOnCall &&
     <Box
           sx={{
             bgcolor: 'background.paper',
@@ -251,7 +297,17 @@ function App() {
              
               
             </Stack>
-            <Stack
+      
+           
+          </Container>
+          
+        </Box>}
+     
+      
+   
+
+     {isOnCall &&<>
+      <Stack
               sx={{ pt: 6 }}
               direction="row"
               spacing={2}
@@ -263,26 +319,34 @@ function App() {
                 value={youtubeLink}
                 onChange={(e) => setYoutubeLink(e.target.value)}
               />
-              <Button size='small' variant="contained" onClick={() => handleYoutubeLink()}> Play Youtube Video
+              <Button size='small' variant="contained" onClick={() => handleYoutubeLink()}> Send Video
               </Button>
               
             </Stack>
-            <Stack mt={2}>
-            {youtubeLink && <ReactPlayer url={youtubeLink}/> }
-            </Stack>
-          </Container>
-          
-        </Box>
-        {/* add video elements to grid */}
-      
-   
-
-     {isOnCall &&<>
+    {youtubeLink &&
+    <>
+        <Stack mt={2}>
+        <ReactPlayer 
+            url={youtubeLink} 
+           width={"100%"}
+            playing={isPlaying}
+            />
+      </Stack>
+      <Stack
+      justifyContent="center"
+      alignItems="center">
+      <Button size='small' variant="contained" onClick={togglePlay}>
+      {isPlaying ? 'Pause' : 'Play'}
+      </Button>
+      </Stack>
+      </>
+   }
       <Stack 
+      mt="2"
       justifyContent="center"
       alignItems="center"
         spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-        <video ref={ourVideoRef} width="300" height="170"  autoPlay playsInline  />
+        <video ref={ourVideoRef} width="300" height="170"  autoPlay playsInline muted />
         <video ref={remoteVideoRef} width="300" height="170"  autoPlay playsInline  />
       </Stack>
       <Stack   justifyContent="center"
@@ -302,13 +366,7 @@ function App() {
       </Stack>
       </>}
     
-      {/* <div>
-        <video ref={ourVideoRef} autoPlay playsInline muted />
-      </div>
-      <div>
-        <video ref={remoteVideoRef} autoPlay playsInline />
-      </div> */}
-
+    
     
       </main>
       <Footer />
