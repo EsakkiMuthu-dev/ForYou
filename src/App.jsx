@@ -11,6 +11,7 @@ import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import Footer from './UIComponents/Footer';
 import CopyToClipboardButton from './UIComponents/CopyToClipboardButton';
+import ShareMeetingInfo from './UIComponents/ShareMeetInfo';
 
 function App() {
   const [peerId, setPeerID] = useState('');
@@ -276,6 +277,7 @@ function App() {
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Your ID is {peerId} <CopyToClipboardButton id={peerId} />
+              <ShareMeetingInfo peerId={peerId} />
             </Typography>
 
             <Stack
