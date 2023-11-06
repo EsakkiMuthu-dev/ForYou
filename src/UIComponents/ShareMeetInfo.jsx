@@ -6,7 +6,7 @@ const ShareMeetingInfo = ({ peerId }) => {
 
   const shareMeeting = () => {
     if (navigator.share) {
-      const shareableLink = `${window.location.href}?peerId=${peerId}`;
+      const shareableLink = `${peerId}`;
       navigator.share({
         title: 'Join my meeting on For You',
         text: `Hey there! Let's catch up on For You. You can watch YouTube together and have a face-to-face chat. Connect with me using this meeting link.`,
