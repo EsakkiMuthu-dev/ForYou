@@ -273,7 +273,7 @@ function App() {
               color="text.primary"
               gutterBottom
             >
-              Get Connected! 
+              Let's Connect! 
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
             Your Unique ID: {peerId} <CopyToClipboardButton id={peerId} />
