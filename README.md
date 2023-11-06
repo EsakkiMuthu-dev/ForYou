@@ -8,6 +8,8 @@ Welcome to For You, the ultimate real-time communication application that allows
 - Seamless connectivity for smooth video streaming
 - Synchronized YouTube video playback for shared viewing experiences
 - Intuitive and user-friendly interface for a seamless user experience
+- Video and audio call support for enhanced communication capabilities
+
 
 ## Technologies Used
 
