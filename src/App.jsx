@@ -273,10 +273,10 @@ function App() {
               color="text.primary"
               gutterBottom
             >
-              Connect 
+              Get Connected! 
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Your ID is {peerId} <CopyToClipboardButton id={peerId} />
+            Your Unique ID: {peerId} <CopyToClipboardButton id={peerId} />
               <ShareMeetingInfo peerId={peerId} />
             </Typography>
 
