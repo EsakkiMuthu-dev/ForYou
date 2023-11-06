@@ -13,7 +13,7 @@ const ShareMeetingInfo = ({ peerId }) => {
       navigator.share({
         title: 'Join my meeting on For You',
         text: message,
-        url: peerId
+        
       })
         .then(() => console.log('Successfully shared meeting info.'))
         .catch((error) => console.error('Error sharing meeting info:', error));
