@@ -275,7 +275,7 @@ function App() {
               Connect 
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Your Id is {peerId} <CopyToClipboardButton id={peerId} />
+              Your ID is {peerId} <CopyToClipboardButton id={peerId} />
             </Typography>
 
             <Stack
