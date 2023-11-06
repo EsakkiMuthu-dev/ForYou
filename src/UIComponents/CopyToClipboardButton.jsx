@@ -10,7 +10,7 @@ const CopyToClipboardButton = ({id}) => {
     
     return (
         <>
-          <Button size='small' variant="outlined" onClick={handleClick}>Share</Button>
+          <Button size='small' variant="outlined" onClick={handleClick}>Copy</Button>
           <Snackbar
           
             open={open}
