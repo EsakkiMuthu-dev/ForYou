@@ -50,6 +50,7 @@ function App() {
 
   // End Call
   const endCall = () => {
+    ourConnection.current.send("EndCall --> Call ended");
     if (ourVideoRef.current && ourVideoRef.current.srcObject) {
       const tracks = ourVideoRef.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
@@ -91,10 +92,27 @@ function App() {
           {
             setYoutubeLink(data.split(' ')[1]);
           }
+          if(data.startsWith('End'))
+          {
+          console.log("Comes inside End Call--->")
+          if (ourVideoRef.current && ourVideoRef.current.srcObject) {
+            const tracks = ourVideoRef.current.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+          }
+          if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+            const tracks = remoteVideoRef.current.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+          }
+          if (peerInstance.current) {
+            peerInstance.current.destroy();
+          }
+          setIsOnCall(false);
+        }
           
           console.log('Received', data);
           setReceievedMessages([...recievedMessages,data]);
         });
+        
       
           // Send messages
           conn.send('Hello from reciever !!');
