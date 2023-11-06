@@ -291,7 +291,7 @@ function App() {
                 value={remotePeerId}
                 onChange={(e) => setRemotePeerId(e.target.value)}
               />
-              <Button size='medium' variant="contained" onClick={() => callPeer(remotePeerId)}> Make Call
+              <Button size='medium' variant="contained" onClick={() => callPeer(remotePeerId)}>Call
               </Button>
 
              
