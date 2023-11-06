@@ -264,8 +264,8 @@ function App() {
       justifyContent="center"
       alignItems="center"
         spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-        <video ref={ourVideoRef} width="300" height="170"  autoPlay playsInline muted />
-        <video ref={remoteVideoRef} width="300" height="170"  autoPlay playsInline muted />
+        <video ref={ourVideoRef} width="300" height="170"  autoPlay playsInline  />
+        <video ref={remoteVideoRef} width="300" height="170"  autoPlay playsInline  />
       </Stack>
       <Stack   justifyContent="center"
         alignItems="center"
