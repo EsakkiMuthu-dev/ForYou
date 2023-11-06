@@ -10,9 +10,9 @@ const CopyToClipboardButton = ({ id }) => {
     navigator.clipboard.writeText(id);
   };
 
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
 
-  return !isMobile ? (
+  return (
     <>
       <Button size="small" onClick={handleClick}>
         <ContentCopyIcon />
@@ -24,7 +24,7 @@ const CopyToClipboardButton = ({ id }) => {
         message="Copied to clipboard"
       />
     </>
-  ) : null;
+  );
 };
 
 export default CopyToClipboardButton;
