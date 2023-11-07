@@ -22,11 +22,13 @@ function App() {
   const[isOnCall,setIsOnCall] = useState(false);
   const[youtubeLink,setYoutubeLink]=useState('');
   const [isPlaying, setIsPlaying] = useState(false);
+  const[isInPip,setIsInPip]=useState(false);
   const[recievedMessages,setReceievedMessages]=useState(["hi","hello"]);
   const ourConnection = useRef(null);
   const ourVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerInstance = useRef(null);
+  const videoPlayerRef =useRef(null);
 
   // Function to toggle video
   const toggleVideo = () => {
@@ -72,7 +74,7 @@ function App() {
       peerInstance.current.destroy();
     }
     setIsOnCall(false);
-
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
     // Refresh the webpage
   window.location.reload();
 
@@ -84,6 +86,27 @@ function App() {
     ourConnection.current.send(`Youtube-link ${youtubeLink}`);
     setYoutubeLink(youtubeLink); // Set the state to trigger a re-render
   };
+
+  //Function to handle pip
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+      if (document.pictureInPictureEnabled && !document.pictureInPictureElement) {
+        // Enter Picture-in-Picture mode
+        if (videoPlayerRef.current) {
+          videoPlayerRef.current.requestPictureInPicture();
+          setIsInPip(true);
+        }
+      }
+    } else {
+      // Exit Picture-in-Picture mode
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture();
+        setIsInPip(false);
+      }
+    }
+  };
+
+
   // Initialize the Peer connection
   useEffect(() => {
     const peer = new Peer();
@@ -125,7 +148,7 @@ function App() {
               peerInstance.current.destroy();
             }
             setIsOnCall(false);
-
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             // Refresh the webpage
             window.location.reload();
           }
@@ -167,6 +190,9 @@ function App() {
         });
 
         toggleVideo();
+
+        //add event Listener for enabling PIP mode
+        document.addEventListener('visibilitychange', handleVisibilityChange);
         
       });
     });
@@ -195,6 +221,7 @@ function App() {
           if(data.startsWith("End"))
           {
             console.log("Comes inside End Call--->")
+
             if (ourVideoRef.current && ourVideoRef.current.srcObject) {
               const tracks = ourVideoRef.current.srcObject.getTracks();
               tracks.forEach((track) => track.stop());
@@ -206,6 +233,7 @@ function App() {
             if (peerInstance.current) {
               peerInstance.current.destroy();
             }
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             setIsOnCall(false);
             // Refresh the webpage
             window.location.reload();
@@ -240,6 +268,7 @@ function App() {
         };
       });
       toggleVideo();
+      document.addEventListener('visibilitychange', handleVisibilityChange);
 
     });
   };
@@ -309,6 +338,7 @@ function App() {
    
 
      {isOnCall &&<>
+     
       <Stack
               sx={{ pt: 6 }}
               direction="row"
@@ -321,6 +351,7 @@ function App() {
                 value={youtubeLink}
                 onChange={(e) => setYoutubeLink(e.target.value)}
               />
+              
               <Button size='small' variant="contained" onClick={() => handleYoutubeLink()}> Send Video
               </Button>
               
@@ -329,17 +360,21 @@ function App() {
     <>
         <Stack mt={2}>
         <ReactPlayer 
+            ref={videoPlayerRef}
             url={youtubeLink} 
            width={"100%"}
+           pip={isInPip}
             playing={isPlaying}
             />
       </Stack>
       <Stack
       justifyContent="center"
       alignItems="center">
+        <Box m={2} p={2}>
       <Button size='small' variant="contained" onClick={togglePlay}>
       {isPlaying ? 'Pause' : 'Play'}
       </Button>
+      </Box>
       </Stack>
       </>
    }
