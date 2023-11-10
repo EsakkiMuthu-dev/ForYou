@@ -13,6 +13,7 @@ import Footer from './UIComponents/Footer';
 import CopyToClipboardButton from './UIComponents/CopyToClipboardButton';
 import ShareMeetingInfo from './UIComponents/ShareMeetInfo';
 
+
 function App() {
   const [peerId, setPeerID] = useState('');
   const [remotePeerId, setRemotePeerId] = useState('');
@@ -22,7 +23,7 @@ function App() {
   const[isOnCall,setIsOnCall] = useState(false);
   const[youtubeLink,setYoutubeLink]=useState('');
   const [isPlaying, setIsPlaying] = useState(false);
-  const[isInPip,setIsInPip]=useState(false);
+  const[pipMode,setPipMode]=useState(false);
   const[recievedMessages,setReceievedMessages]=useState(["hi","hello"]);
   const ourConnection = useRef(null);
   const ourVideoRef = useRef(null);
@@ -89,20 +90,13 @@ function App() {
 
   //Function to handle pip
   const handleVisibilityChange = () => {
+   
     if (document.visibilityState === 'hidden') {
-      if (document.pictureInPictureEnabled && !document.pictureInPictureElement) {
-        // Enter Picture-in-Picture mode
-        if (videoPlayerRef.current) {
-          videoPlayerRef.current.requestPictureInPicture();
-          setIsInPip(true);
-        }
-      }
+      ourConnection.current.send("Enable into pip mode!!");
+      setPipMode(true);
     } else {
-      // Exit Picture-in-Picture mode
-      if (document.pictureInPictureElement) {
-        document.exitPictureInPicture();
-        setIsInPip(false);
-      }
+      ourConnection.current.send("Disable into pip mode!!");
+      setPipMode(false);
     }
   };
 
@@ -362,9 +356,9 @@ function App() {
         <ReactPlayer 
             ref={videoPlayerRef}
             url={youtubeLink} 
-           width={"100%"}
-           pip={isInPip}
-            playing={isPlaying}
+            width={"100%"}
+            pip={pipMode}
+           playing={isPlaying}
             />
       </Stack>
       <Stack
