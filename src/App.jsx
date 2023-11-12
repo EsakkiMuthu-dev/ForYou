@@ -274,6 +274,19 @@ function App() {
   };
 
 
+  //Functions to handle Synchronized Video
+  const handleSeek=()=>{
+    ourConnection.current.send("Seeking to ",videoPlayerRef.current.getCurrentTime());
+
+  }
+
+  const handlePlay=()=>{
+    ourConnection.current.send("Start play the video if you are already not!!")
+  }
+
+  const handlePause=()=>{
+    ourConnection.current.send("Pause the video if you are already not!!")
+  }
 
  
   return (
@@ -358,6 +371,10 @@ function App() {
             url={youtubeLink} 
             width={"100%"}
             pip={pipMode}
+            onSeek={handleSeek}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            controls
            playing={isPlaying}
             />
       </Stack>
